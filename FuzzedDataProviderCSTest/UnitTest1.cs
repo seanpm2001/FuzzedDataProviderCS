@@ -613,5 +613,22 @@ namespace FuzzedDataProviderCSTest
                 }
             }
         }
+        
+        [TestMethod]
+        public void TestOverflowConsumeRemaining()
+        {
+            using (Stream s = new MemoryStream(new byte[6] { 0x00, 0x02, 0x41, 0x41, 0x41, 0x41 }))
+            {
+                using (MemoryStream ms = new MemoryStream())
+                {
+                    s.CopyTo(ms);
+                    var fdp = new FuzzedDataProviderCS(ms.ToArray());
+                    var v1_len = fdp.ConsumeUInt16();
+                    var v1 = fdp.ConsumeString(v1_len);
+                    if (fdp.InsufficientData) return;
+                    var v2 = fdp.ConsumeRemainingAsString();
+                }
+            }
+        }
     }
 }
