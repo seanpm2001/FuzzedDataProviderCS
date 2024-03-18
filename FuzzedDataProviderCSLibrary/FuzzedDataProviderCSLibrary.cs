@@ -438,7 +438,6 @@ namespace FuzzedDataProviderCSLibrary
                 (_data.Length - _offset) + ((_data.Length - _offset) % sizeof(Char) == 0 ? 0 : 1) : 
                 sizeof(Char) * (int)length;
             var toBeConverted = ConsumeBytes(step);            
-            Advance(step);
 
             var strBuilder = IsLittleEndian ? 
                 new StringBuilder(Encoding.BigEndianUnicode.GetString(toBeConverted)) :
